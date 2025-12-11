@@ -1,0 +1,27 @@
+# Binaries
+wechat-server
+*.exe
+
+# Config files with secrets
+config.yaml
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Go
+vendor/
+*.test
+*.out
+coverage.txt
+
+# Logs
+*.log
+logs/

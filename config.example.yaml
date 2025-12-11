@@ -1,0 +1,21 @@
+# 服务器配置
+server:
+  port: 3000
+  api_token: "your-api-token"  # Yi-API 访问凭证
+
+# 公众号配置（支持多个）
+accounts:
+  - app_id: "wx1234567890"
+    app_secret: "your-app-secret-1"
+    token: "your-wechat-token-1"
+    name: "公众号A"
+
+  - app_id: "wx0987654321"
+    app_secret: "your-app-secret-2"
+    token: "your-wechat-token-2"
+    name: "公众号B"
+
+# 验证码配置
+code:
+  length: 6           # 验证码长度
+  expire_minutes: 5   # 有效期（分钟）
