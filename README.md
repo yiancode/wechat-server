@@ -1,12 +1,12 @@
 # WeChat Server
 
-微信公众号验证码登录服务，为 [Yi-API](https://github.com/QuantumNous/new-api) 提供微信登录支持。
+基于微信公众号的验证码登录服务，可集成到任意需要微信登录功能的应用系统。
 
 ## 功能特性
 
 - 支持多公众号管理
 - 验证码自动生成与过期
-- 兼容 Yi-API / One API 的微信登录接口
+- RESTful API 接口，易于集成
 - Docker 一键部署
 - 最小依赖，轻量高效
 
@@ -102,7 +102,7 @@ export WECHAT_NAME=我的公众号
 
 ## API 接口
 
-### 验证用户（Yi-API 调用）
+### 验证用户
 
 ```
 GET /api/wechat/user?code={验证码}&app_id={公众号AppID}
@@ -153,16 +153,25 @@ GET /health
 }
 ```
 
-## 在 Yi-API 中配置
+## 集成到你的应用
 
-1. 登录 Yi-API 管理后台
-2. 进入 **系统设置 → 配置 WeChat Server**
-3. 填写：
-   - **WeChat Server 服务器地址**: `https://your-domain.com`
-   - **WeChat Server 访问凭证**: 配置文件中的 `api_token`
-   - **微信公众号二维码图片链接**: 公众号二维码 URL
-4. 保存设置
-5. 在 **配置登录注册** 中开启微信登录
+在你的应用系统中集成微信登录功能：
+
+1. **配置 WeChat Server 地址和凭证**
+   - 服务器地址: `https://your-domain.com`
+   - API 访问凭证: 配置文件中的 `api_token`
+
+2. **前端展示公众号二维码**
+   - 引导用户扫码关注公众号
+
+3. **用户发送消息获取验证码**
+   - 用户向公众号发送任意消息
+   - 公众号自动回复 6 位验证码（有效期 5 分钟）
+
+4. **验证用户身份**
+   - 调用 `/api/wechat/user` 接口验证验证码
+   - 获取用户的微信 OpenID
+   - 完成登录或注册流程
 
 ## 工作流程
 
@@ -174,7 +183,7 @@ GET /health
      │ 输入验证码                  │ 发送验证码
      ↓                            ↓
 ┌─────────┐   验证 code    ┌─────────────┐
-│ Yi-API  │ ──────────────→│WeChat Server│
+│ 你的应用 │ ──────────────→│WeChat Server│
 └─────────┘                └─────────────┘
      │                            │
      │←── 返回 OpenID ────────────┘
