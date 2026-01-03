@@ -23,10 +23,20 @@ type ServerConfig struct {
 
 // WechatAccount 微信公众号账户配置
 type WechatAccount struct {
-	AppID     string `yaml:"app_id"`
-	AppSecret string `yaml:"app_secret"`
-	Token     string `yaml:"token"`
-	Name      string `yaml:"name"`
+	AppID      string      `yaml:"app_id"`
+	AppSecret  string      `yaml:"app_secret"`
+	Token      string      `yaml:"token"`
+	Name       string      `yaml:"name"`
+	Forwarders []Forwarder `yaml:"forwarders"` // 消息转发配置
+}
+
+// Forwarder 消息转发器配置
+type Forwarder struct {
+	Name     string   `yaml:"name"`     // 转发器名称
+	URL      string   `yaml:"url"`      // 转发目标URL
+	Priority int      `yaml:"priority"` // 优先级（数字越小优先级越高）
+	Events   []string `yaml:"events"`   // 要转发的事件类型，"*" 表示全部
+	Timeout  int      `yaml:"timeout"`  // 超时时间（毫秒），默认5000
 }
 
 // CodeConfig 验证码配置

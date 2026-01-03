@@ -91,6 +91,18 @@ func handleMessage(c *gin.Context, account *config.WechatAccount) {
 	log.Printf("[%s] 收到消息: type=%s, from=%s, content=%s",
 		account.Name, msg.MsgType, msg.GetOpenID(), msg.Content)
 
+	// 转发消息到配置的转发器
+	// 如果转发器返回有效的 XML 响应，优先使用该响应
+	forwardResponse := ForwardMessage(account, msg, body)
+	if forwardResponse != nil {
+		log.Printf("[%s] 使用转发器响应", account.Name)
+		c.Data(http.StatusOK, "application/xml", forwardResponse)
+		return
+	}
+
+	// 没有转发器响应，使用本地默认处理
+	log.Printf("[%s] 使用本地默认响应", account.Name)
+
 	// 处理消息
 	var replyContent string
 	switch {
