@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/seefs001/wechat-server/config"
@@ -117,18 +118,24 @@ func handleMessage(c *gin.Context, account *config.WechatAccount) {
 		return
 
 	case msg.IsTextMessage():
-		// 文本消息，生成验证码
-		openID := msg.GetOpenID()
-		code := store.GetStore().GenerateCode(openID, account.AppID)
-		replyContent = fmt.Sprintf("您的登录验证码是：%s\n\n验证码有效期 %d 分钟，请尽快使用。",
-			code, config.Get().Code.ExpireMinutes)
+		// 文本消息，检查是否是请求验证码
+		content := strings.TrimSpace(strings.ToLower(msg.Content))
+		if isVerificationCodeRequest(content) {
+			// 用户请求验证码
+			openID := msg.GetOpenID()
+			code := store.GetStore().GenerateCode(openID, account.AppID)
+			replyContent = fmt.Sprintf("您的登录验证码是：%s\n\n验证码有效期 %d 分钟，请尽快使用。",
+				code, config.Get().Code.ExpireMinutes)
+		} else {
+			// 其他文本消息，不自动生成验证码
+			c.String(http.StatusOK, "success")
+			return
+		}
 
 	default:
-		// 其他消息类型，也生成验证码
-		openID := msg.GetOpenID()
-		code := store.GetStore().GenerateCode(openID, account.AppID)
-		replyContent = fmt.Sprintf("您的登录验证码是：%s\n\n验证码有效期 %d 分钟，请尽快使用。",
-			code, config.Get().Code.ExpireMinutes)
+		// 其他消息类型（图片、语音等），不回复
+		c.String(http.StatusOK, "success")
+		return
 	}
 
 	// 构建回复
@@ -141,4 +148,25 @@ func handleMessage(c *gin.Context, account *config.WechatAccount) {
 	}
 
 	c.Data(http.StatusOK, "application/xml", replyXML)
+}
+
+// isVerificationCodeRequest 判断用户消息是否是请求验证码
+// 支持的关键词: 验证码、登录、code、login、yanzhengma
+func isVerificationCodeRequest(content string) bool {
+	keywords := []string{
+		"验证码",
+		"登录",
+		"code",
+		"login",
+		"yanzhengma",
+		"获取验证码",
+		"发送验证码",
+	}
+
+	for _, keyword := range keywords {
+		if strings.Contains(content, keyword) {
+			return true
+		}
+	}
+	return false
 }
