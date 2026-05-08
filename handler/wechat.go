@@ -114,7 +114,6 @@ func handleMessage(c *gin.Context, account *config.WechatAccount) {
 			"<a href=\"https://code.ai80.vip\">Code80 — AI API 平台（主站）</a>\n" +
 			"<a href=\"https://chat.ai80.vip\">AI 对话助手（在线体验）</a>\n\n" +
 			"回复【教程】获取接入指南\n" +
-			"回复【进群】加入用户交流群\n" +
 			"回复【客服】联系人工客服\n\n" +
 			"平台支持按量计费、团队共享、API Key 自助管理。\n" +
 			"推广合作详情回复【合作】"
