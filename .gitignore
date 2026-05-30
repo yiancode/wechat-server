@@ -1,5 +1,6 @@
 # Binaries
 wechat-server
+wechat-server-linux
 *.exe
 
 # Config files with secrets
