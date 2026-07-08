@@ -32,11 +32,12 @@ type WechatAccount struct {
 
 // Forwarder 消息转发器配置
 type Forwarder struct {
-	Name     string   `yaml:"name"`     // 转发器名称
-	URL      string   `yaml:"url"`      // 转发目标URL
-	Priority int      `yaml:"priority"` // 优先级（数字越小优先级越高）
-	Events   []string `yaml:"events"`   // 要转发的事件类型，"*" 表示全部
-	Timeout  int      `yaml:"timeout"`  // 超时时间（毫秒），默认5000
+	Name     string            `yaml:"name"`     // 转发器名称
+	URL      string            `yaml:"url"`      // 转发目标URL
+	Priority int               `yaml:"priority"` // 优先级（数字越小优先级越高）
+	Events   []string          `yaml:"events"`   // 要转发的事件类型，"*" 表示全部
+	Timeout  int               `yaml:"timeout"`  // 超时时间（毫秒），默认5000
+	Headers  map[string]string `yaml:"headers"`  // 附加请求头（如 X-Internal-Forward-Token 内部转发认证）
 }
 
 // CodeConfig 验证码配置

@@ -9,6 +9,15 @@ accounts:
     app_secret: "your-app-secret-1"
     token: "your-wechat-token-1"
     name: "公众号A"
+    # 消息转发器（可选）：把公众号消息/事件转发给下游业务系统
+    forwarders:
+      - name: "code80"
+        url: "https://code.example.com/api/v1/webhook/wechat/mp"
+        priority: 1                    # 数字越小优先级越高，取最高优先级的有效 XML 响应
+        events: ["subscribe", "SCAN"]  # 要转发的事件/消息类型，"*" 表示全部
+        timeout: 5000                  # 毫秒，默认 5000
+        headers:                       # 附加请求头（可选）；下游校验内部转发身份用
+          X-Internal-Forward-Token: "your-internal-forward-secret"
 
   - app_id: "wx0987654321"
     app_secret: "your-app-secret-2"

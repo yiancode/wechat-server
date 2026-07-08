@@ -151,6 +151,14 @@ func doForward(f config.Forwarder, body []byte) ForwardResult {
 	req.Header.Set("Content-Type", "application/xml")
 	req.Header.Set("X-Forwarded-By", "wechat-server")
 
+	// 附加配置的自定义请求头（如下游要求的 X-Internal-Forward-Token 内部转发认证）
+	for k, v := range f.Headers {
+		if strings.TrimSpace(k) == "" {
+			continue
+		}
+		req.Header.Set(k, v)
+	}
+
 	// 发送请求
 	resp, err := client.Do(req)
 	if err != nil {
