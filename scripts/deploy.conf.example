@@ -1,0 +1,10 @@
+# wechat-server 部署配置覆盖（复制为 scripts/deploy.conf 使用，不提交到 Git）
+REMOTE_HOST="106.53.117.99"
+REMOTE_USER="root"
+REMOTE_DIR="/opt/wechat-server"
+BINARY_NAME="wechat-server"
+# SSH_KEY="~/.ssh/id_ed25519"   # 留空则用默认 ssh 凭证
+SERVICE_NAME="wechat-server"
+# 服务监听端口（与服务器 config.yaml 的 server.port 一致）；留空跳过端口校验
+SERVICE_PORT="3000"
+SERVICE_PORT_WAIT_SECONDS=30

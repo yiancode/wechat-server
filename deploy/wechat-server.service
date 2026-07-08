@@ -1,0 +1,19 @@
+[Unit]
+Description=WeChat Server
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/wechat-server
+ExecStart=/opt/wechat-server/wechat-server
+Environment=CONFIG_PATH=/opt/wechat-server/config.yaml
+Restart=always
+RestartSec=3
+User=root
+
+# 基础加固
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -41,6 +41,25 @@ go build -o wechat-server
 ./wechat-server
 ```
 
+### 一键部署（生产）
+
+本地交叉编译 → 上传 → 原子替换二进制 → 端口验证，失败自动回滚，停机约 2-3 秒。
+不上传/不覆盖服务器上的 `config.yaml`（含密钥，以服务器为准）。
+
+```bash
+# 可选：覆盖目标服务器等默认值
+cp scripts/deploy.conf.example scripts/deploy.conf && vi scripts/deploy.conf
+
+# 首次部署（初始化目录 + 安装 systemd 服务）
+./scripts/deploy-zero-downtime.sh --first-deploy
+
+# 日常部署（跑单测 → 编译 → 替换 → 验证）
+./scripts/deploy-zero-downtime.sh
+
+# 只部署已编译好的 wechat-server-linux
+./scripts/deploy-zero-downtime.sh --skip-build
+```
+
 ## 配置说明
 
 ### 多公众号模式（推荐）

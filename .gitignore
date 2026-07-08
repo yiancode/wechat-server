@@ -27,3 +27,6 @@ coverage.txt
 *.log
 logs/
 wechat-server-bin
+
+# Deploy
+scripts/deploy.conf
